@@ -8,6 +8,7 @@
 <script type="text/javascript" src="lib/utils.js" ></script>
 <script type="text/javascript" src="lib/annotator/annotator-full.min.js" ></script>
 <script type="text/javascript" src="lib/annotator.plugin.tags.js" ></script>
+<script type="text/javascript" src="lib/annotator.plugin.categories.js" ></script>
 <script type="text/javascript" src="lib/annotator.plugin.events.js" ></script>
 <script type="text/javascript" src="app.js" ></script>
 <style>
@@ -76,30 +77,56 @@
     <div id="annotations-list-view"></div>
     </div>
 </div>
-<script type="text/template" id="annotation-item-view-template">
-<div>
-    <b><%= quote %></b>
-    <br><%= text %>
-    <% _.each(tags, function(tag) { %>
-        <span class="tag"><%= tag %></span>
-    <% }); %>
-
-</div>
+<script type="text/template" id="annotation-list-title-template">
+    <div>
+        <span>Annotations</span><span id='total-count'></span>
+        <button id='all'>All - <%= total %></button>
+        <button id='done-annotated'>Done - <%= done %></button>
+        <button id='not-annotated'>Remainings - <%= remaining %></button>
+    </div>
 </script>
+
+<script type="text/template" id="annotation-category-no-items-template">
+    <div>
+        <b><%= categoryName %> <small>Not annotated yet</small></b>
+    </div>
+</script>
+<script type="text/template" id="annotation-category-with-items-template">
+    <div>
+        <b><%= categoryName %> [<%= categoryItemsCount %></b>]
+        <ul id="<%= elemId %>"></ul>
+    </div>
+</script>
+<script type="text/template" id="annotation-item-view-template">
+    <div>
+        <b><%= quote %></b>
+        <br><%= text %>
+        <% _.each(tags, function(tag) { %>
+            <span class="tag"><%= tag %></span>
+        <% }); %>
+    </div>
+</script>  
 <script type="text/javascript">
+var annotationCategories = new AnnotationCategories();
+annotationCategories.url = 'categories.json';
+annotationCategories.fetch({reset: true});
 var annotationCollection = new AnnotationCollection();
 var annotatorjsView = new AnnotatorjsView({
     el: "#annotatorjs",
+    availableTags: ['tag1', 'tag2'],
     collection: annotationCollection,
-    availableTags: ['tag1', 'tag2']
+    annotationCategories: annotationCategories
 }).render();
 var annotationsListView = new AnnotationsListView({
     el: "#annotations-list-view",
-    collection: annotationCollection
+    collection: annotationCollection,
+    annotationCategories: annotationCategories
 }).render();
 var annotationsTitleView = new AnnotationsTitleView({
     el: "#annotations-list-title",
-    collection: annotationCollection
+    collection: annotationCollection,
+    annotationCategories: annotationCategories
 }).render();
 
 </script>
+ 
