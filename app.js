@@ -59,6 +59,9 @@ var AnnotationsListView = Backbone.View.extend({
             case 'done-annotated':
                 $(this.el).html('');
                 this.renderAnnotationWithCategories(annotationsByCategories);
+                if(_.keys(annotationsByCategories).length === 0) {
+                    $(this.el).html('Oops! You haven\'t annotated anything');
+                }
                 break;
             case 'not-annotated':
                 $(this.el).html('');
@@ -89,11 +92,11 @@ var AnnotationsListView = Backbone.View.extend({
     },
     renderAnnotationWithCategories: function(annotationsByCategories) {
         var self = this;
-        if (annotationsByCategories !== undefined) {
+        if (annotationsByCategories !== undefined && _.keys(annotationsByCategories).length > 0) {
             var t = _.template($('#annotation-category-with-items-template').html());
             for (var annotationCategoryName in annotationsByCategories) {
                 var annotationsGroup = annotationsByCategories[annotationCategoryName];
-                annotationCategoryElemId = annotationCategoryName.replace(/\s+/g, '-');
+                annotationCategoryElemId = annotationCategoryName.replace(/\s+|;|,/g, '-');
                 $(self.el).append(t({
                     'elemId': annotationCategoryElemId,
                     'categoryName': annotationCategoryName.trunc(40),
@@ -132,8 +135,6 @@ var AnnotationsTitleView = Backbone.View.extend({
     },
     resetListView: function(e) {
         e.preventDefault();
-        var clickedElem = e.target.id;
-        this.annotationCategories.trigger('resetAnnotationsList', clickedElem);
+        this.annotationCategories.trigger('resetAnnotationsList', e.target.id);
     }
-
 });

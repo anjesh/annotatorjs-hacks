@@ -54,7 +54,6 @@
 }
 .right {
     background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #D51386;
     float: left;
     overflow: hidden;
     padding: 20px 10px;
@@ -62,8 +61,49 @@
 }
 .tag {
     background-color: #eee;
-    font-size: 10px;
-    padding:5px;
+    font-size: 11px;
+    padding: 4px 6px;
+    border-radius: 4px;
+}
+
+#annotations-list-title {
+    margin-bottom: 14px;
+}
+
+.annotation-category-done ul {
+    margin-top: 6px;
+    padding-left: 24px;
+}
+
+.annotation-category-done ul li {
+    margin-bottom: 14px;
+}
+
+.annotation-category-done,.annotation-category-not-done {
+    border-left: 2px solid #4F9E06;
+    padding-left: 12px;
+    margin-bottom: 14px;
+}
+
+.annotation-category-not-done {
+    border-left: 2px solid #f00;
+}
+
+.annotation-item {
+    font-size: 13px;
+}
+
+.annotation-item span {
+    margin-bottom: 5px;
+}
+
+.annotation-item .quote {
+    display: block;
+}
+
+.annotation-item .text {
+    color: #777;
+    margin-bottom: 10px!important;
 }
 </style>
 <div id="main" class="rounded" >
@@ -87,20 +127,20 @@
 </script>
 
 <script type="text/template" id="annotation-category-no-items-template">
-    <div>
-        <b><%= categoryName %> <small>Not annotated yet</small></b>
+    <div class="annotation-category-not-done">
+        <%= categoryName %> <small>Not annotated yet</small>
     </div>
 </script>
 <script type="text/template" id="annotation-category-with-items-template">
-    <div>
-        <b><%= categoryName %> [<%= categoryItemsCount %></b>]
+    <div class="annotation-category-done">
+        <%= categoryName %> [<%= categoryItemsCount %>]
         <ul id="<%= elemId %>"></ul>
     </div>
 </script>
 <script type="text/template" id="annotation-item-view-template">
     <div>
-        <b><%= quote %></b>
-        <br><%= text %>
+        <span class="quote"><%= quote %></span>
+        <span class="text"><%= text %></span>
         <% _.each(tags, function(tag) { %>
             <span class="tag"><%= tag %></span>
         <% }); %>
